@@ -1,0 +1,38 @@
+version: '3'
+services:
+  # Mysql Database
+  mysql:
+    container_name: is3107-mysql
+    image: mysql:latest
+    environment:
+      USER_NAME: root
+      MYSQL_DATABASE: airflow
+      MYSQL_ROOT_PASSWORD: root
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+
+  # Airflow webserver
+  webserver:
+    container_name: is3107-webserver
+    build:
+      dockerfile: Dockerfile
+      context: "./airflowDockerfile"    
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://root:root@mysql/airflow
+      AIRFLOW__CORE__FERNET_KEY: ''
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        airflow db init &&
+        airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.com &&
+        airflow webserver
+        airflow scheduler
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
