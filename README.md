@@ -2,22 +2,6 @@
 
 This is a Docker-based project for IS3107, which includes an Airflow webserver and a MySQL database. 
 
-## Accessing Containers
-
-To access the containers, you need to have Docker installed on your machine. Once you have Docker installed, follow these steps:
-
-1. Clone this repository to your local machine.
-2. Navigate to the project's root directory.
-3. Run the following command to start the containers:
-
-`docker-compose up`
-
-This will start both the MySQL database and the Airflow webserver containers. Once the containers are up and running, you can access the Airflow UI by visiting `http://localhost:8080` in your web browser. 
-
-To stop the containers, use the following command:
-
-`docker-compose down`
-
 ## Project Structure
 
 The project consists of two services:
@@ -39,3 +23,26 @@ airflow webserver --port 8080 -D &&
 airflow scheduler</code>
 
 This will set up the Airflow environment with a default admin user account, and you can start creating and scheduling DAGs.
+
+
+## Accessing Containers
+
+To access the containers, you need to have Docker installed on your machine. Once you have Docker installed, follow these steps:
+
+1. Clone this repository to your local machine.
+2. Navigate to the project's root directory.
+3. Run the following command to start the containers:
+
+`docker-compose up`
+
+This will start both the MySQL database and the Airflow webserver containers. Once the containers are up and running, you can access the Airflow UI by visiting `http://localhost:8080` in your web browser. 
+
+To stop the containers, use the following command:
+
+`docker-compose down`
+
+## Running the Tableau Dashboard
+
+Open the 'TripAdvisor Dashboard.twb' in Tableau Desktop. You will be prompt to sign into MySQL using these credentials:
+- Username: root
+- Password: root

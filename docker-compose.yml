@@ -38,3 +38,4 @@ services:
       - ./dags:/opt/airflow/dags
     ports:
       - "8080:8080"
+
