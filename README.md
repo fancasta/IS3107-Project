@@ -33,9 +33,9 @@ The `./dags` directory contains the DAG files, which are mounted as a volume to 
 
 To initialize the database, create a user account, and start the webserver and scheduler, the `entrypoint` command in the `docker-compose.yml` file runs the following command when the container starts:
 
-```airflow db init &&
+<code>airflow db init &&
 airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.com &&
 airflow webserver --port 8080 -D &&
-airflow scheduler
+airflow scheduler</code>
 
 This will set up the Airflow environment with a default admin user account, and you can start creating and scheduling DAGs.
