@@ -25,12 +25,14 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://root:root@mysql/airflow
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+      AIRFLOW__WEBSERVER__TIMEOUT: '150s' # Increase the timeout to 120 seconds
+      AIRFLOW__WEBSERVER__DAGBAG_IMPORT_TIMEOUT: '90s'
     entrypoint: ["/bin/bash", "-c"]
     command:
       - |
         airflow db init &&
         airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.com &&
-        airflow webserver
+        airflow webserver --port 8080 -D &&
         airflow scheduler
     volumes:
       - ./dags:/opt/airflow/dags
