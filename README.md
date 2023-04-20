@@ -36,6 +36,6 @@ To initialize the database, create a user account, and start the webserver and s
 ```airflow db init &&
 airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.com &&
 airflow webserver --port 8080 -D &&
-airflow scheduler```
+airflow scheduler
 
 This will set up the Airflow environment with a default admin user account, and you can start creating and scheduling DAGs.
