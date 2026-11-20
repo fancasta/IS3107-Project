@@ -1,48 +1,15 @@
-# IS3107 Airflow Project
+# Exploring Singapore travel reviews with Airflow and Tableau
 
-This is a Docker-based project for IS3107, which includes an Airflow webserver and a MySQL database. 
+Which themes recur in reviews of Singapore hotels, restaurants and attractions? This IS3107 project brings three types of TripAdvisor listings into MySQL, scores review sentiment and groups recurring topics for exploration in Tableau.
 
-## Project Structure
+## Follow a review through the pipeline
 
-The project consists of two services:
+1. **Collect listings and reviews.** The Airflow workflow starts a separate branch for each listing type. Once a branch discovers listing links, its detail and review tasks can run independently. [Workflow definition](dags/is3107Dag.py)
+2. **Score and group the text.** The sentiment task uses spaCy and TextBlob polarity to update listing-level sentiment ranks. A separate task extracts noun phrases, fits BERTopic and writes topic counts by category to the `ReviewTopic` table. [Sentiment scoring](dags/helpers/sentimentAnalysis.py) · [Topic modelling](dags/helpers/topicAnalysis.py)
+3. **Explore the results.** The Tableau workbook connects to MySQL. It contains the dashboard definition and needs a populated database to display the project data. [Tableau workbook](TripAdvisor%20Dashboard.twb)
 
-- MySQL Database
-- Airflow Webserver
+## Local setup
 
-The MySQL database is used as the backend for Airflow, and the Airflow webserver is used to manage and monitor the DAGs.
+From the repository root, start Docker and run `docker compose up --build`. The configuration exposes the Airflow UI at `http://localhost:8080` and MySQL on host port `3307`. The `is3107` workflow defines a 30-day schedule. Open the workbook in Tableau Desktop and use the local MySQL settings in the [Compose file](docker-compose.yml).
 
-The `docker-compose.yml` file defines the services, ports, and environment variables for the project. The `Dockerfile` and `airflowDockerfile` files define the Docker images used for the Airflow webserver. 
-
-The `./dags` directory contains the DAG files, which are mounted as a volume to the Airflow webserver container.
-
-To initialize the database, create a user account, and start the webserver and scheduler, the `entrypoint` command in the `docker-compose.yml` file runs the following command when the container starts:
-
-<code>airflow db init &&
-airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.com &&
-airflow webserver --port 8080 -D &&
-airflow scheduler</code>
-
-This will set up the Airflow environment with a default admin user account, and you can start creating and scheduling DAGs.
-
-
-## Accessing Containers
-
-To access the containers, you need to have Docker installed on your machine. Once you have Docker installed, follow these steps:
-
-1. Clone this repository to your local machine.
-2. Navigate to the project's root directory.
-3. Run the following command to start the containers:
-
-`docker-compose up`
-
-This will start both the MySQL database and the Airflow webserver containers. Once the containers are up and running, you can access the Airflow UI by visiting `http://localhost:8080` in your web browser. 
-
-To stop the containers, use the following command:
-
-`docker-compose down`
-
-## Running the Tableau Dashboard
-
-Open the 'TripAdvisor Dashboard.twb' in Tableau Desktop. You will be prompt to sign into MySQL using these credentials:
-- Username: root
-- Password: root
+The collection code targets the TripAdvisor pages used during the course project. A fresh collection depends on the current page structure. To explore the design without collecting reviews, start with the workflow and analysis code above. Stop the local services with `docker compose down`.
