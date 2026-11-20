@@ -2,10 +2,6 @@
 
 Which themes recur in reviews of Singapore hotels, restaurants and attractions? This IS3107 project brings three types of TripAdvisor listings into MySQL, scores review sentiment and groups recurring topics for exploration in Tableau.
 
-## My contribution
-
-I committed the Airflow workflow and container setup, added the category-specific collection and text-analysis tasks, and connected the results to a Tableau workbook. The workflow exposes the dependencies explicitly: topic modelling waits for all three review feeds, while sentiment ranking also waits for listing details. [Initial pipeline](https://github.com/fancasta/IS3107-Project/commit/3ffff4164afd29ec3609af24eb95605c4f915612) · [Collection and analysis tasks](https://github.com/fancasta/IS3107-Project/commit/3acd411ebdf319485278cae258d23d1527f66128) · [Tableau workbook commit](https://github.com/fancasta/IS3107-Project/commit/85c44f910fa96b8fe9df1fd46673d3a6e8adebcd)
-
 ## A data-quality example you can run offline
 
 A hotel or restaurant review stores a five-star rating as the text `50`. The attraction collector reads a numeric star value such as `5.0`. Averaging those source values together would distort the result. The [SQL query](analysis/review_ratings.sql) normalizes each source at review level before aggregating. Invalid and missing values contribute to the unscored count.
